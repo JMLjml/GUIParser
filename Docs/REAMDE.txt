@@ -5,4 +5,4 @@ The project is a solution for a homework assignment for a college level language
 The assignment is to build a program that parses a text input file
 and then constructs a GUI based upon the text input.
 
-The attached web archive document has the project description.
+The attached pdf document has the project description.

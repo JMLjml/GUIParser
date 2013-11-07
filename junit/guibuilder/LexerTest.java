@@ -18,13 +18,17 @@ public class LexerTest {
 		
 		Terminal t;
 		
+		
 		while(input.hasNext()) {
 			t = lex.getNextToken();
 			System.out.println(t.toString());
 		}
 		
+		/*
+		for(int i =0; i < 40; i++) {
+			t = lex.getNextToken();
+			System.out.println(t.toString());
+			
+		}*/
 	}
-	
-	
-
 }

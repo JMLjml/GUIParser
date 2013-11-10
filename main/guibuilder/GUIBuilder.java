@@ -15,31 +15,30 @@ public class GUIBuilder {
 		// TODO Auto-generated method stub
 		
 		System.out.println("Inside of main from GUIBulder.java");
-			
+		//uncomment when time to run for real
+		/*
 		if(args.length != 1){
 			System.out.println("Usage: Supply file name of GUI input file to be parsed as argument.");
 			return;
 		}
 		
 		Scanner input = new Scanner(new File(args[0]));
-		System.out.println(input.nextLine());
+		*/
+		
+		Scanner input = new Scanner(new File("testdata.txt"));
+		
+		Lexer lex = new Lexer(input);
+		Parser parser = new Parser(lex);
+		
+		boolean success = buildGUI(parser);		
+		
 		input.close();
-				
+			
+	}
+	
+	static boolean buildGUI(Parser parser) {
 		
-		//This works for setting up the scanner to read the args file when the file
-		//is saved in the bin folder
-		/*
-		Scanner input = new Scanner(new File(args[0]));
-		System.out.println(input.nextLine());
-		*/
-		
-		//This works for reading from the keyboard
-		/*
-		Scanner sc = new Scanner(System.in);
-		System.out.println(sc.nextLine());
-		sc.close();
-		*/
-		//StringBuilder nodes = new StringBuilder();
+		return(parser.Parse());
 	}
 
 }

@@ -7,16 +7,7 @@ import org.junit.Test;
 
 
 public class TerminalTest {
-	
-	//@Before
-	
-
-	@Test
-	public void testTerminal() {
-		fail("Not yet implemented");
-	}
-	
-	
+		
 	//Test that the equals function is behaving correctly
 	//Also test the special Terminal cases for NUMBER and STRING
 	@Test

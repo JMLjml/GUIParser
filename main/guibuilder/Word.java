@@ -17,7 +17,7 @@ public class Word extends Terminal {
 	}
 	
 	public String toString() {
-		return(super.toString() + " " + this.lexeme);
+		return(this.lexeme);
 	}
 
 }

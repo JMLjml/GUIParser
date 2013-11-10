@@ -1,14 +1,12 @@
 package guibuilder;
 
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.Scanner;
 
 
 public class Lexer {
 	private int line = 1; //used for reporting line position of a syntax error
 	private char peek;
-	private Hashtable<String, Word> words = new Hashtable<String, Word>(); //used as a symbol table
 	private Scanner input;
 		
 	
@@ -29,19 +27,6 @@ public class Lexer {
 		} else {
 			throw new IOException("Invalid Scanner Argument supplied to Lexer constructor.");
 		}
-			
-		// TODO reserve keywords here - this might not be necessary...
-		reserve(new Word(Token.Window,"Window"));		
-		reserve(new Word(Token.OpenParen, "("));
-	}
-	
-	
-	/**Helper function for reserving keywords
-	 * Called by the Lexer constructor
-	 * @param Word w
-	 */
-	void reserve(Word w) {
-		words.put(w.lexeme, w);
 	}
 	
 	
@@ -94,14 +79,8 @@ public class Lexer {
 		
 		//discard the second '"', and get the next look ahead character for future calls
 		if(input.hasNext()) peek = input.next().charAt(0);
-				
 		
-		Word w = words.get(lexeme);
-		
-		if(w != null) return w;
-
-		w = new Word(Token.STRING, lexeme);
-		words.put(lexeme,  w);
+		Word w = new Word(Token.STRING, lexeme);
 		return w;		
 	}
 	
@@ -166,10 +145,13 @@ public class Lexer {
 	}
 	
 	
-	
-	protected Terminal getNextToken() throws IOException {
-		
-		
+	/** returns the next token from the input
+	 * call the appropriate helper methods for handling each type of
+	 * token scenario
+	 * @return Terminal
+	 * @throws IOException
+	 */
+	protected Terminal getNextToken() {		
 		
 		//skip and discard whitespace while counting new lines
 		while(input.hasNext()) {

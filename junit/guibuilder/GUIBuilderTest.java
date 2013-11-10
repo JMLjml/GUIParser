@@ -11,19 +11,13 @@ public class GUIBuilderTest {
 	@Test
 	public void testMain() {
 		
+		String[] args ={"testdata.txt"};
 		
-		String[] args ={};
-		
-		try {
+		try {			
 			GUIBuilder.main(args);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			fail("Not yet implemented");
-		}
-		
-		
+		} 		
 	}
 
 }

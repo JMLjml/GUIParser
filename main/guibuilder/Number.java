@@ -17,6 +17,6 @@ public class Number extends Terminal{
 	}
 	
 	public String toString() {
-		return(super.toString()+ " " + this.value);
+		return(new Integer(this.value).toString());
 	}
 }

@@ -1,8 +1,15 @@
 package guibuilder;
 
+import java.awt.Button;
+import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.LayoutManager;
+import java.awt.Panel;
+import java.awt.TextField;
+import java.awt.Window;
 
 import javax.swing.*;
 
@@ -13,7 +20,7 @@ public class Parser {
 	
 	private JFrame frame;
 	private LayoutManager layout;
-	
+	//private Window window;
 	
 
 	public Parser(Lexer lex) {
@@ -61,25 +68,32 @@ public class Parser {
 	
 		//If the program makes it here, it is time to start building the window
 		System.out.println("Build the window here with title " + windowName + ", width: " + width + " height: " + height);
+		
 		buildWindow(windowName,width,height);
 		
 		//if(!layout(Window window)) return(false);
 		
-		layout();
-		this.frame.setLayout(layout);
+		layout(frame);
+		//this.frame.setLayout(layout);
 		
 		
-		widgets();
-			
+		widgets(frame);
+		
+		match(new Terminal(Token.End));
+		match(new Terminal(Token.Period));
+		
+		frame.revalidate();
+		
+		
 		return(true);
 		
 	}
 	
 	
 	
-	private void layout() {
+	private void layout(Container container) {
 		match(new Terminal(Token.Layout));
-		layout_type();
+		layout_type(container);
 		match(new Terminal(Token.Colon));
 		return;
 	}
@@ -88,13 +102,14 @@ public class Parser {
 	
 	
 	
-	private void layout_type() {
+	private void layout_type(Container container) {
 		
 		//Check to see if it is a Flow layout or a Grid layout
 		switch(terminal.toString()) {
 		case("Flow"): 
-			System.out.println("Build a flow layout here");
-			this.layout = new FlowLayout();			
+			System.out.println("Set flow layout here");
+			container.setLayout(new FlowLayout());
+			
 			terminal = lex.getNextToken();// need to manually advance the token here
 			return;
 				
@@ -122,14 +137,14 @@ public class Parser {
 				match(new Terminal(Token.CloseParen));
 				
 				System.out.println("build a grid layout here. rows: " + rows + " columns: " + columns + " hgap: " + hGap + " vgap: " + vGap);
-				layout = new GridLayout(rows, columns,hGap,vGap);
+				container.setLayout(new GridLayout(rows, columns,hGap,vGap));
 				
 				return;
 			
 			//Optional gap assignments were missing, build the grid layout
 			case("Close_Paren"):
 				System.out.println("build a grid layout here. rows: " + rows + " columns: " + columns);
-				layout = new GridLayout(rows, columns);
+				container.setLayout(new GridLayout(rows, columns));;
 				terminal = lex.getNextToken();
 				return;
 			
@@ -144,19 +159,19 @@ public class Parser {
 	
 	
 	//this needs recursive ability
-	private void widgets() {
+	private void widgets(Container container) {
 		switch(terminal.toString()) {
 		case("End"):
 			return;
 		
 		default: 
-			widget(); 
-			widgets();
+			widget(container); 
+			widgets(container);
 			return;
 		}
 	}
 	
-	private void widget() {
+	private void widget(Container container) {
 		//optional data fields
 		String name;
 		Integer width;
@@ -165,18 +180,25 @@ public class Parser {
 		
 		case("Panel"):
 			terminal = lex.getNextToken();
-			layout();
-			System.out.println("build a new panel here");
-			widgets();
+			System.out.println("build a new panel here and then set its layout");
+			Panel panel = new Panel();
+			panel.setVisible(true);
+			layout(panel);
+			//add widgets to said panel widgets(panel)
+			widgets(panel);
 			match(new Terminal(Token.End));
 			match(new Terminal(Token.SemiColon));
+			container.add(panel);
 			return;
 		
 		case("Button"):
 			terminal = lex.getNextToken();
 			name = match(new Terminal(Token.STRING));
 			match(new Terminal(Token.SemiColon));
-			System.out.println("build a new button here with the name: " + name);
+			System.out.println("build a new button here with the name: " + name + " and add it to the container");
+			Button button = new Button(name);
+			button.setVisible(true);
+			container.add(button);
 			return;
 		
 		case("Group"): 
@@ -191,13 +213,19 @@ public class Parser {
 			name = match(new Terminal(Token.STRING));
 			match(new Terminal(Token.SemiColon));
 			System.out.println("build a new label here with the name: " + name);
+			Label label = new Label(name);
+			container.add(label);
+			
 			return;
 		
 		case("TextField"):
 			terminal = lex.getNextToken();
 			width = new Integer(match(new Terminal(Token.NUMBER)));
 		   	match(new Terminal(Token.SemiColon));
-		    System.out.println("build a new Text Field here with the width of: " + width);
+		    System.out.println("build a new Text Field here with the width of: " + width + " and add it to the parent container");
+		    TextField tf = new TextField(width);
+		    container.add(tf);
+		    
 		    return;
 				
 		default:
@@ -224,19 +252,23 @@ public class Parser {
 	
 	private void radio_button() {
 		terminal = lex.getNextToken();
-		String rString = match(new Terminal(Token.STRING));
+		String name = match(new Terminal(Token.STRING));
 		match(new Terminal(Token.SemiColon));
-		System.out.println("Build a radio button here with the name of " + rString);
+		System.out.println("Build a radio button here with the name of " + name);
 		return;
 	}
 	
 	
 	private void buildWindow(String title, int width, int height){
+
+		
 		this.frame = new JFrame(title);
 		this.frame.setSize(width, height);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setVisible(true);
+		
+		
 	}
 	
 	

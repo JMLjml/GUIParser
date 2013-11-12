@@ -1,7 +1,5 @@
 package guibuilder;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 
 import org.junit.Test;
@@ -11,7 +9,7 @@ public class GUIBuilderTest {
 	@Test
 	public void testMain() {
 		
-		String[] args ={"testdata.txt"};
+		String[] args ={"testdata.txt", "gui2.txt"};
 		
 		try {			
 			GUIBuilder.main(args);

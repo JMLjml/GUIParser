@@ -3,26 +3,18 @@ package guibuilder;
 import java.awt.Button;
 import java.awt.Container;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Label;
-import java.awt.LayoutManager;
 import java.awt.Panel;
 import java.awt.TextField;
-import java.awt.Window;
-
 import javax.swing.*;
 
 public class Parser {
 	
 	private Lexer lex;
 	private Terminal terminal;
-	
 	private JFrame frame;
-	private LayoutManager layout;
-	//private Window window;
 	
-
 	public Parser(Lexer lex) {
 		this.lex = lex;
 	}
@@ -34,7 +26,7 @@ public class Parser {
 			terminal = lex.getNextToken();
 			return(str);
 		} else {
-			throw new Error("Syntax Error at line : " + lex.getLineNumber());
+			throw new Error("Syntax Error at line : " + lex.getLineNumber() + ". Expected to find token " + t.toString() + ".");
 		}
 	}
 	
@@ -142,7 +134,7 @@ public class Parser {
 				return;
 			
 			//Optional gap assignments were missing, build the grid layout
-			case("Close_Paren"):
+			case("CloseParen"):
 				System.out.println("build a grid layout here. rows: " + rows + " columns: " + columns);
 				container.setLayout(new GridLayout(rows, columns));;
 				terminal = lex.getNextToken();
@@ -203,7 +195,7 @@ public class Parser {
 		
 		case("Group"): 
 			terminal = lex.getNextToken();
-			radio_buttons();
+			radio_buttons(container);
 			match(new Terminal(Token.End));
 			match(new Terminal(Token.SemiColon));
 			return;
@@ -218,7 +210,7 @@ public class Parser {
 			
 			return;
 		
-		case("TextField"):
+		case("Textfield"):
 			terminal = lex.getNextToken();
 			width = new Integer(match(new Terminal(Token.NUMBER)));
 		   	match(new Terminal(Token.SemiColon));
@@ -235,11 +227,11 @@ public class Parser {
 	}
 	
 	//this needs recursion
-	private void radio_buttons() {
+	private void radio_buttons(Container container) {
 		switch(terminal.toString()) {
 		case("Radio"): 
-			radio_button(); 
-			radio_buttons();
+			radio_button(container); 
+			radio_buttons(container);
 			return;	
 		
 		case("End"):
@@ -250,11 +242,13 @@ public class Parser {
 		}
 	}
 	
-	private void radio_button() {
+	private void radio_button(Container container) {
 		terminal = lex.getNextToken();
 		String name = match(new Terminal(Token.STRING));
 		match(new Terminal(Token.SemiColon));
 		System.out.println("Build a radio button here with the name of " + name);
+		JRadioButton radio = new JRadioButton(name);
+		container.add(radio);
 		return;
 	}
 	

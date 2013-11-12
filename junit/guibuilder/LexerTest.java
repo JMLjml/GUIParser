@@ -19,7 +19,7 @@ public class LexerTest {
 		Terminal t;
 		
 		String[] lexemes = {"Window", "Calculator", "OpenParen", "200", "Coma", "200", "CloseParen",
-				"Layout", "Flow", "Colon", "TextField", "20", "SemiColon", "Panel", "Layout", "Grid", "OpenParen",
+				"Layout", "Flow", "Colon", "Textfield", "20", "SemiColon", "Panel", "Layout", "Grid", "OpenParen",
 				"4", "Coma", "3", "Coma", "5", "Coma", "5", "CloseParen", "Colon", "Button", "7",
 				"SemiColon", "Button", "8", "SemiColon", "Button", "9", "SemiColon", "Button", "4", "SemiColon",
 				"Button", "5", "SemiColon", "Button", "6", "SemiColon", "Button", "1", "SemiColon", "Button",

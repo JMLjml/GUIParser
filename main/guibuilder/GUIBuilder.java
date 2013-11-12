@@ -12,27 +12,27 @@ public class GUIBuilder {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		
 		System.out.println("Inside of main from GUIBulder.java");
-		//uncomment when time to run for real
-		/*
-		if(args.length != 1){
+		
+		
+		if(!(args.length >= 1)){
 			System.out.println("Usage: Supply file name of GUI input file to be parsed as argument.");
 			return;
 		}
 		
-		Scanner input = new Scanner(new File(args[0]));
-		*/
+		for(int i = 0; i < args.length; i++) {
+			Scanner input = new Scanner(new File(args[i]));
 		
-		Scanner input = new Scanner(new File("testdata.txt"));
 		
-		Lexer lex = new Lexer(input);
-		Parser parser = new Parser(lex);
+				
+			Lexer lex = new Lexer(input);
+			Parser parser = new Parser(lex);
 		
-		boolean success = buildGUI(parser);		
+			buildGUI(parser);		
 		
-		input.close();
+			input.close();
+		}
 			
 	}
 	

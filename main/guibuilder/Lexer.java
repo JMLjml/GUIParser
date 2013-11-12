@@ -187,7 +187,7 @@ public class Lexer {
 				case "Group": return new Terminal(Token.Group);
 				case "Label": return new Terminal(Token.Label);
 				case "Panel": return new Terminal(Token.Panel);
-				case "TextField": return new Terminal(Token.TextField);
+				case "Textfield": return new Terminal(Token.Textfield);
 				case "Radio": return new Terminal(Token.Radio);
 				}
 					

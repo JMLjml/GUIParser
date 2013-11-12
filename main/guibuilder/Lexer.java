@@ -156,13 +156,16 @@ public class Lexer {
 		//skip and discard whitespace while counting new lines
 		while(input.hasNext()) {
 			if(peek == ' ' || peek == '\t') peek = input.next().charAt(0);
-			else if(peek == '\n' || peek == '\r') { 
-				line++;
-				peek = input.next().charAt(0);
+			else if(peek == '\r') {
+				if(input.hasNext()) {
+					peek = input.next().charAt(0);
+					if(peek == '\n') line++; 
+				}
+			
+			if(input.hasNext()) peek = input.next().charAt(0);
 			}
 			else break;	
 		}
-		
 		
 		//special case - we have a Number Token
 		if(Character.isDigit(peek)) {			

@@ -26,7 +26,7 @@ public class Parser {
 			terminal = lex.getNextToken();
 			return(str);
 		} else {
-			throw new Error("Syntax Error at line : " + lex.getLineNumber() + ". Expected to find token " + t.toString() + ".");
+			throw new Error("Syntax Error at line : " + lex.getLineNumber() + ". Expected to find token " + t.toString() + ", but received " + terminal.toString());
 		}
 	}
 	
@@ -141,11 +141,11 @@ public class Parser {
 				return;
 			
 			//syntax error
-			default: throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Grid Layout statement.");
+			default: throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Grid Layout statement, but received " + terminal.toString());
 		}		
 		
 			//syntax error
-		default: throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Flow or Grid layout statement.");	
+		default: throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Flow or Grid layout statement, but received " + terminal.toString());	
 		}
 	}
 	
@@ -221,7 +221,7 @@ public class Parser {
 		    return;
 				
 		default:
-			throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected widget statement.");
+			throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected widget statement, but received " + terminal.toString());
 		
 		}
 	}
@@ -238,7 +238,7 @@ public class Parser {
 			return;
 		
 		default:
-			throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Radio statement.");
+			throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Radio statement, but received " + terminal.toString());
 		}
 	}
 	
@@ -252,17 +252,13 @@ public class Parser {
 		return;
 	}
 	
-	
-	private void buildWindow(String title, int width, int height){
-
-		
+	/**Set the initial variables for the overall frame container*/
+	private void buildWindow(String title, int width, int height){		
 		this.frame = new JFrame(title);
 		this.frame.setSize(width, height);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.setVisible(true);
-		
-		
+		this.frame.setVisible(true);		
 	}
 	
 	

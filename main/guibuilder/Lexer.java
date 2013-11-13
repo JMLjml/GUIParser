@@ -153,6 +153,23 @@ public class Lexer {
 	 */
 	protected Terminal getNextToken() {		
 		
+		
+		
+		//skip and discard whitespace while counting new lines
+		while(input.hasNext()) {
+			if(peek == ' ' || peek == '\t' || peek == '\r') peek = input.next().charAt(0);
+			else if(peek == '\n') {
+				peek = input.next().charAt(0);
+				line++; 
+			}
+			else break;	
+		}
+		
+		
+		
+		/**
+		
+		
 		//skip and discard whitespace while counting new lines
 		while(input.hasNext()) {
 			if(peek == ' ' || peek == '\t') peek = input.next().charAt(0);
@@ -165,7 +182,7 @@ public class Lexer {
 			if(input.hasNext()) peek = input.next().charAt(0);
 			}
 			else break;	
-		}
+		}*/
 		
 		//special case - we have a Number Token
 		if(Character.isDigit(peek)) {			

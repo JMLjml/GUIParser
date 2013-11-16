@@ -1,0 +1,52 @@
+Window "Vote for your Favorite Animal in each Category" (500, 275) Layout Flow:
+	Panel Layout Grid(1, 2, 10, 10):
+				
+		Panel Layout Grid(5, 1, 10, 10):
+			Label "Mammals";
+			Group
+				Radio "Bear";
+				Radio "Wolf";
+				Radio "Mountain Lion";
+				Radio "Tiger";
+			End;
+		End;
+		
+		Panel Layout Grid(5, 1, 10, 10):
+			Label "Amphibians";
+			Group
+				Radio "Snake";
+				Radio "Frog";
+				Radio "Salamander";
+				Radio "Newt";
+			End;
+		End;
+	End;
+	
+	Panel Layout Grid(1, 2, 10, 10):
+		
+		Panel Layout Grid(5, 1, 10, 10):
+			Label "Fish";
+			Group
+				Radio "Trout";
+				Radio "Bass";
+				Radio "CatFish";
+				Radio "Muskie";
+			End;
+		End;
+		
+		Panel Layout Grid(5, 1, 10, 10):
+			Label "Bird";
+			Group
+				Radio "Owl";
+				Radio "Eagle";
+				Radio "Hawk";
+				Radio "Wood Pecker";
+			End;
+		End;
+		
+	End;
+	
+	Panel Layout Flow:		
+		Button "Cast Your Ballot";
+	End;	
+End.

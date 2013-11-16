@@ -1,3 +1,16 @@
+/**
+ * File: Lexer.java
+ * Author: John M. Lasheski
+ * Date: November 15, 2013
+ * Platform: Windows 8, Eclipse Juno 
+ * 
+ * Class: UMUC CMSC 330, Section 7981
+ * Project: 1
+ * 
+ * The Lexer class uses a Scanner input to read characters from the supplied input one at a time. The Lexer takes these characters and creates 
+ * terminals that will be returned to the Parser class. The Lexer call with throw a syntax error if an unexpected character is encountered.
+ */
+
 package guibuilder;
 
 import java.io.IOException;
@@ -20,7 +33,7 @@ public class Lexer {
 		
 		if(input != null) {
 			this.input = input;			
-			input.useDelimiter("");//this sets the scanner input to give me one character at at time
+			input.useDelimiter("");//this sets the scanner input to give one character at at time
 						
 			if(input.hasNext()) this.peek = input.next().charAt(0);//load the first char into peek
 						
@@ -42,6 +55,8 @@ public class Lexer {
 	/**Used to create special case NUMBER Tokens
 	 * 
 	 * @return Number
+	 * 
+	 * Basic idea found in Aho Compilers 2006.
 	 */
 	private Number createNumberToken() {
 		int v = 0;
@@ -87,7 +102,7 @@ public class Lexer {
 
 	/**Help method used for creating a lexeme that will be used
 	 * to create a standard token
-	 * @return
+	 * @return String lexeme
 	 */
 	private String createLexeme() {
 		StringBuilder sb = new StringBuilder();	
@@ -103,7 +118,7 @@ public class Lexer {
 	
 	/** Used to create punctuation tokens
 	 * 
-	 * @return
+	 * @return Terminal
 	 */
 	private Terminal createPunctuationToken() {
 		switch(peek) {
@@ -137,11 +152,8 @@ public class Lexer {
 		  }
 		  return new Terminal(Token.Colon);
 		  
-		default : break; // should probably throw an error here
+		default : throw new Error("Sytnax Error, unexpected Punctuation Symbol at line " + this.getLineNumber());
 		}
-		
-		//We have an error
-		return(new Word(Token.STRING,"Punctuation Error"));
 	}
 	
 	
@@ -153,8 +165,6 @@ public class Lexer {
 	 */
 	protected Terminal getNextToken() {		
 		
-		
-		
 		//skip and discard whitespace while counting new lines
 		while(input.hasNext()) {
 			if(peek == ' ' || peek == '\t' || peek == '\r') peek = input.next().charAt(0);
@@ -165,36 +175,18 @@ public class Lexer {
 			else break;	
 		}
 		
-		
-		
-		/**
-		
-		
-		//skip and discard whitespace while counting new lines
-		while(input.hasNext()) {
-			if(peek == ' ' || peek == '\t') peek = input.next().charAt(0);
-			else if(peek == '\r') {
-				if(input.hasNext()) {
-					peek = input.next().charAt(0);
-					if(peek == '\n') line++; 
-				}
-			
-			if(input.hasNext()) peek = input.next().charAt(0);
-			}
-			else break;	
-		}*/
-		
+				
 		//special case - we have a Number Token
 		if(Character.isDigit(peek)) {			
 			return(createNumberToken());			
 		}
 		
-		//special case - we have a STRING - store it as a Word in the symbol table
+		//special case - we have a STRING - create a Word Terminal
 		if(peek == '"') {
 			return(createStringToken());
 		}
 			
-		
+		//Regular case terminals
 		if(Character.isLetter(peek)) {				
 		
 				switch(createLexeme()) {

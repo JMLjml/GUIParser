@@ -1,0 +1,27 @@
+Window "Choose Your Superbowl Matchup" (350, 350) Layout Flow:
+	Panel Layout Grid (1, 2):
+	
+		Panel Layout Grid (5, 1):
+			Label "AFC Team";
+			Group
+				Radio "Indianapolis Colts";
+				Radio "Denver Broncos";
+				Radio "Baltimore Ravens";
+				Radio "Cincinnati Bengals";
+			End;
+		End;
+		
+		Panel Layout Grid (5, 1):
+			Label "NFC Team";
+			Group
+				Radio "New York Giants";
+				Radio "San Francisco 49ers";
+				Radio "Green Bay Packers";
+				Radio "Atlanta Falcons";
+			End;
+		End;
+		
+	End;
+	
+	Button "Kickoff Game!";
+End.

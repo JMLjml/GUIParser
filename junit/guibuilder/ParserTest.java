@@ -1,3 +1,15 @@
+/**
+ * File: ParserTest.java
+ * Author: John M. Lasheski
+ * Date: November 15, 2013
+ * Platform: Windows 8, Eclipse Juno 
+ * 
+ * Class: UMUC CMSC 330, Section 7981
+ * Project: 1
+ * 
+ * JUnit test asserts that the Parser Method finished and returns true.
+ */
+
 package guibuilder;
 
 import static org.junit.Assert.*;

@@ -1,3 +1,19 @@
+/**
+ * File: Parser.java
+ * Author: John M. Lasheski
+ * Date: November 15, 2013
+ * Platform: Windows 8, Eclipse Juno 
+ * 
+ * Class: UMUC CMSC 330, Section 7981
+ * Project: 1
+ * 
+ * The Parser class is works in conjunction with the Lexer class to construct parser and then construct the GUI display dictated by the input file.
+ * If the syntax of the input is incorrect construction of the GUI Display will terminate and an Error will be thrown reporting the details of the line
+ * within the input where the error occurred and a message providing some detail as to the nature of the syntax error.
+ * 
+ * The parser class uses recursive calls where necessary to create the components of the GUI.
+ */
+
 package guibuilder;
 
 import java.awt.Button;
@@ -19,7 +35,21 @@ public class Parser {
 		this.lex = lex;
 	}
 	
-		
+	
+	
+	/** Match is a helper method used often to see if current terminal stored in the parser class matched the supplied parameter terminal t, 
+	 * before calling the lexer to return the next terminal.
+	 * 
+	 * It was inspired by a similar method found in Aho Compilers 2006.
+	 * 
+	 * The method retuns a string to the calling function of the terminal.toString()
+	 * 
+	 * Match will throw an Error if the current terminal doesn't match the supplied parameter t
+	 * 
+	 * @param Terminal t
+	 * @return string
+	 * @throws Error
+	 */
 	private String match(Terminal t) throws Error {
 		if(terminal.equals(t)) {
 			String str = terminal.toString();
@@ -31,10 +61,15 @@ public class Parser {
 	}
 	
 	
+	/** Method called by GUIBuilder for starting construction of the GUI Display*/
 	protected boolean Parse(){
 		return(gui());
 	}
 	
+	/**
+	 * Represents the first expected terminal in the GUI Display grammar. It calls
+	 * all other necessary methods for the completion of construction. 
+	 */
 	private boolean gui() {
 		
 		//data fields for holding the information gathered from parsing
@@ -54,35 +89,34 @@ public class Parser {
 		
 		//Get the window height
 		match(new Terminal(Token.Coma));
-		height = new Integer(match(new Terminal(Token.NUMBER)));
-		
+		height = new Integer(match(new Terminal(Token.NUMBER)));		
 		match(new Terminal(Token.CloseParen));
 	
 		//If the program makes it here, it is time to start building the window
-		System.out.println("Build the window here with title " + windowName + ", width: " + width + " height: " + height);
-		
 		buildWindow(windowName,width,height);
 		
-		//if(!layout(Window window)) return(false);
-		
+		//call the layout method to set the layout for the GUI window	
 		layout(frame);
-		//this.frame.setLayout(layout);
 		
-		
+		//call the widgets method to construct the widgets that will go into the window
 		widgets(frame);
 		
+		//Tokens found at the end of the input file
 		match(new Terminal(Token.End));
 		match(new Terminal(Token.Period));
 		
+		//Refresh the GUI so that the new components are displayed correctly
 		frame.revalidate();
-		
-		
-		return(true);
-		
+				
+		return(true);		
 	}
 	
 	
-	
+	/**
+	 * Layout sets the layout type for the the conatiner supplied as a paramenter.
+	 * it calls layout_type for help
+	 * @param container
+	 */
 	private void layout(Container container) {
 		match(new Terminal(Token.Layout));
 		layout_type(container);
@@ -93,15 +127,17 @@ public class Parser {
 	
 	
 	
-	
+	/**
+	 * Setup either a flow layout or a grid layout to the supplied container
+	 * 
+	 * @param container
+	 */
 	private void layout_type(Container container) {
 		
 		//Check to see if it is a Flow layout or a Grid layout
 		switch(terminal.toString()) {
 		case("Flow"): 
-			System.out.println("Set flow layout here");
 			container.setLayout(new FlowLayout());
-			
 			terminal = lex.getNextToken();// need to manually advance the token here
 			return;
 				
@@ -119,7 +155,7 @@ public class Parser {
 			match(new Terminal(Token.Coma));
 			columns = new Integer(match(new Terminal(Token.NUMBER)));
 			
-			//check for option gap assignments and build grid layout
+			//check for optional gap assignments and build grid layout
 			switch(terminal.toString()) {
 			case("Coma"):
 				terminal = lex.getNextToken();
@@ -128,14 +164,13 @@ public class Parser {
 				vGap = new Integer(match(new Terminal(Token.NUMBER)));
 				match(new Terminal(Token.CloseParen));
 				
-				System.out.println("build a grid layout here. rows: " + rows + " columns: " + columns + " hgap: " + hGap + " vgap: " + vGap);
+				//build the grid layout here with the optional gap assignments
 				container.setLayout(new GridLayout(rows, columns,hGap,vGap));
 				
 				return;
 			
-			//Optional gap assignments were missing, build the grid layout
+			//Optional gap assignments were not supplied, build the regular grid layout
 			case("CloseParen"):
-				System.out.println("build a grid layout here. rows: " + rows + " columns: " + columns);
 				container.setLayout(new GridLayout(rows, columns));;
 				terminal = lex.getNextToken();
 				return;
@@ -144,13 +179,16 @@ public class Parser {
 			default: throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Grid Layout statement, but received " + terminal.toString());
 		}		
 		
-			//syntax error
+		//syntax error
 		default: throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected Flow or Grid layout statement, but received " + terminal.toString());	
 		}
 	}
 	
 	
-	//this needs recursive ability
+	/**
+	 * Recursive method for adding a single widget or multiple widgets to the supplied container
+	 * @param container
+	 */
 	private void widgets(Container container) {
 		switch(terminal.toString()) {
 		case("End"):
@@ -163,6 +201,12 @@ public class Parser {
 		}
 	}
 	
+	
+	/**
+	 * Calls a switch on the current terminal to determine the widget that should be added to the supplied container
+	 * 
+	 * @param container
+	 */
 	private void widget(Container container) {
 		//optional data fields
 		String name;
@@ -172,22 +216,23 @@ public class Parser {
 		
 		case("Panel"):
 			terminal = lex.getNextToken();
-			System.out.println("build a new panel here and then set its layout");
+			//Build a new Panel container here and then set the Panel's Layout
 			Panel panel = new Panel();
 			panel.setVisible(true);
 			layout(panel);
-			//add widgets to said panel widgets(panel)
-			widgets(panel);
+			
+			widgets(panel);//add widgets to said panel widgets(panel)
 			match(new Terminal(Token.End));
 			match(new Terminal(Token.SemiColon));
-			container.add(panel);
+			container.add(panel);// add the new Panel to the supplied container
 			return;
 		
 		case("Button"):
 			terminal = lex.getNextToken();
 			name = match(new Terminal(Token.STRING));
 			match(new Terminal(Token.SemiColon));
-			System.out.println("build a new button here with the name: " + name + " and add it to the container");
+
+			//create a new Button here and add it to the container
 			Button button = new Button(name);
 			button.setVisible(true);
 			container.add(button);
@@ -204,29 +249,30 @@ public class Parser {
 			terminal = lex.getNextToken();
 			name = match(new Terminal(Token.STRING));
 			match(new Terminal(Token.SemiColon));
-			System.out.println("build a new label here with the name: " + name);
+			//Create a new Label and add it to the container
 			Label label = new Label(name);
-			container.add(label);
-			
+			container.add(label);			
 			return;
 		
 		case("Textfield"):
 			terminal = lex.getNextToken();
 			width = new Integer(match(new Terminal(Token.NUMBER)));
 		   	match(new Terminal(Token.SemiColon));
-		    System.out.println("build a new Text Field here with the width of: " + width + " and add it to the parent container");
+		    //Create a new Textfield and add it to the container
 		    TextField tf = new TextField(width);
-		    container.add(tf);
-		    
+		    container.add(tf);		    
 		    return;
 				
 		default:
 			throw new Error("Syntax Error at line: " + lex.getLineNumber() + " Expected widget statement, but received " + terminal.toString());
-		
 		}
 	}
 	
-	//this needs recursion
+
+	/**
+	 * Recursive method for adding a single radio button or multiple radio buttons to the supplied container
+	 * @param container
+	 */
 	private void radio_buttons(Container container) {
 		switch(terminal.toString()) {
 		case("Radio"): 
@@ -242,11 +288,16 @@ public class Parser {
 		}
 	}
 	
+	
+	/**
+	 * Method for creating and adding radio buttons to the supplied container
+	 * @param container
+	 */
 	private void radio_button(Container container) {
 		terminal = lex.getNextToken();
 		String name = match(new Terminal(Token.STRING));
 		match(new Terminal(Token.SemiColon));
-		System.out.println("Build a radio button here with the name of " + name);
+		//Create the radio button and add it to the container
 		JRadioButton radio = new JRadioButton(name);
 		container.add(radio);
 		return;
@@ -259,7 +310,5 @@ public class Parser {
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setVisible(true);		
-	}
-	
-	
+	}	
 }

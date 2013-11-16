@@ -1,3 +1,15 @@
+/**
+ * File: LexerTest.java
+ * Author: John M. Lasheski
+ * Date: November 15, 2013
+ * Platform: Windows 8, Eclipse Juno 
+ * 
+ * Class: UMUC CMSC 330, Section 7981
+ * Project: 1
+ * 
+ * JUnit test for the Lexer class. Makes the class return lexemes from a known input and verifies they are as expected.
+ */
+
 package guibuilder;
 
 import static org.junit.Assert.*;
